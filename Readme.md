@@ -244,3 +244,38 @@ Useful for collapsing range information
 ### Address Range Aggregation 
 ![image](https://user-images.githubusercontent.com/79100627/162080048-ff2fbf4b-da49-41a0-a03a-696d9160ca04.png)
 
+### Address Rnage Aggregation Can't Aggregate 
+![image](https://user-images.githubusercontent.com/79100627/162080284-0fc85d4b-f021-429d-9cbe-d31b5b528bf1.png)
+
+### Forwarding Table 
+Each Router keeps a forwarding table linking, for each IP range, the link and next hop to be used
+
+Formally, the Forwarding Information Base (FIB)
+
+Built from aggregating information retrieved from other routers (routing table, or RIB)
+
+### Longest Prefix Matching 
+
+If more than one range match an IP in the table the **most specific entry** is used
+
+Since ranges are prefixes, the longest prefix is the most specific 
+
+Hence, longest prefix match 
+
+Example: **192.168.35.0/24** is more specific than **192.168.0.0/16**
+
+### Routing: What do we know?
+
+Internet is organized into ASs
+
+Each AS is responsible for some collection of IP addresses 
+
+Each AS must tell other ASs
+ - Which addresses it can handle 
+ - which addresses it is willing to route to 
+
+###
+
+
+
+
