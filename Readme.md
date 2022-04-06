@@ -2,7 +2,6 @@
 
 This is Jay Chung's Computer Network's study
 
-
 ## Unit1
 
 ### Introduction 
@@ -136,3 +135,4 @@ Returning errors can tell
 Does not always work: relies on routers that may decided not to send answers 
 
 May find multiple routes to same host 
+
