@@ -136,3 +136,73 @@ Does not always work: relies on routers that may decided not to send answers
 
 May find multiple routes to same host 
 
+## Unit2
+
+### Interent Organization Structure 
+Organized into entities called **Autonomous System (ASs)** 
+- Remnant of old private networks 
+
+Each Autonomous System:
+- is assigned **a range/ collection of IP addresses**
+- is responsible for **Routing to address it owns**
+- is reponsible for **Routing to addresses that are not its responsibility
+- uses address ranges represented in **CIDR form**
+
+### Who Controls an AS?
+- Some compnaies do the end systems 
+- Some companies do long haul line (backbones) 
+  - within a country or region
+  - around the world 
+- Some do a mix of both 
+- Some companies are consortiums 
+- Networks often connect to each other at Internet Exchanges 
+- Routers need to know how to get to each possible destination 
+
+### Autonomous Systems
+
+```
+=======                                                       =========
+| SFU |                                                ______ |  UofT |
+======= =======                       ========        |       =========
+   |    | UBC |                       |GTAnet| _______|       =========
+   |    =======                       ========        |______ | YorkU |
+   |_______|__________                  |                     =========
+                      |                 |
+                   ===========          |
+                   | Canarie | _________|
+                   ===========
+                   
+```
+Each of AS handles several range of IP addresses 
+
+### Classes Inter-Domain Routing (CIDR)
+AS recieves a **range of addresses**
+All routing from outside the AS only need to reach the AS that contains it 
+- Routing table **does not need to list** every single IP address 
+- Routing information propagation is also compacted 
+- **AS takes care of internal routing**
+
+### CIDR Prefix Matching 
+How can we represent a range of addresses?
+- Example: 123.123.96.16/19 
+  - Represented by some address in range, followed by a number of fixed bits 
+  - All addresses in range have the same fixed bits (first 19 bits)
+- Fixed bits are called **network address** (19 bits)
+- Unfixed bits are called **host address** (32-19 = 13 bits) 
+
+### CIDR Prefix Example
+CIDR Address: 123.123.96.16/19
+
+01111011 01111011 01100000 00010000
+
+**01111011** **01111011** **011**00000 00010000 (**19 Network address** 13 Host address) 
+
+### Alternavtive Format: NETMASK
+CIDR Address: 123.123.96.16/255.255.224.0
+
+**11111111 11111111 111**00000 00000000    (**1: Network Address**, 0: Host Address)
+
+255      255      224       0
+
+
+
