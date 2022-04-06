@@ -99,13 +99,13 @@ Some rules can be complicated
 ```
 
 ### Sending Data Through The Task 
-
+```
 Application <------------->  Application
 Transport   <------------->  Transport
 Network     <---Network--->  Network 
   Link <---> Link<-->Link <---> Link
 Physical Medium        Physical Medium 
-
+```
 ### Protocol Stack Responsiblities 
 
 Transport Layer 
