@@ -204,5 +204,43 @@ CIDR Address: 123.123.96.16/255.255.224.0
 
 255      255      224       0
 
+### Computing The Network Address
 
+```
+CIDR Address: 192.168.45.24/255.255.240.0
+192.168.45.24  = 11000000 10101000 00101101 00011000
+255.255.240.0  = 11111111 11111111 11110000 00000000
+Net address    = 11000000 10101000 00100000 00000000
+
+Destination IP is 192.168.49.104
+192.168.49.104 = 11000000 10101000 00110001 01101000
+255.255.240.0  = 11111111 11111111 11110000 00000000
+Net address    = 11000000 10101000 00110000 00000000
+```
+### CIDR Prefix Matching
+The first and last addresses are never used for an actual host
+- Generally the first address is used to **represent the network **
+- The last address in range is used for **broadcast **
+
+### Address Range Division
+How to divide an address range into two?
+
+Set **first unfixed bit** as fixed bit in two ranges 
+ - One range has that bit as 0, the other has that bit as 1
+ - Repeat if multiple ranges required 
+
+### Address Range Division Example 
+
+![image](https://user-images.githubusercontent.com/79100627/162079633-7ebe5b31-c97e-47d7-bf67-58c3599921af.png)
+
+### Address Range Aggregation
+Ranges can be aggregated if, when combined:
+ - All ranges being aggregated are covered
+ - New range does not include groups not being aggregated
+
+Useful for collapsing range information 
+- Example: when **advertising network ranges** 
+
+### Address Range Aggregation 
+![image](https://user-images.githubusercontent.com/79100627/162080048-ff2fbf4b-da49-41a0-a03a-696d9160ca04.png)
 
