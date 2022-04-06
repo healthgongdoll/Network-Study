@@ -33,17 +33,17 @@ End systems access Internet through **Internet Service Providers (ISPs).** Each 
  - Failure handled by **Best Effort** approach
 
 ### Multiplexing 
- Data flows need to be "multiplexed"
+ **Data flows need to be "multiplexed"**
 - Multiple input streams must share the medium 
 - It must be possible to "demultiplex" at the destimation 
 
-Multiple Methods 
+**Multiple Methods** 
 - Time division multiplexing (time quotas) 
 - Frequency division multiplexing (different frequencies) 
 - Code division multiplexing (different representations of data) 
 - Orthogonal multiplexing (combination of techniques) 
 
-Problems
+**Problems**
 - Not efficient for dynamic flows 
 - Complex interaction of new data sources 
 
