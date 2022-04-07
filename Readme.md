@@ -519,8 +519,83 @@ Transport-Layer **"Address"**
 - Port Number 
 - Local port and remote port 
 
+### Trnasport Layer Protocols 
 
+**Transmission Control Protocol (TCP)**
+- Connection establishment ("Three-way handshake")
+- Ordering enforced using sequence numbers (streams) 
+- Lost packet resent, managed by TCP itself
+- Flow control, congestion control 
 
+**User Datagram Protocol (UDP) **
+- No connection establishment 
+- No reordering, messages must be fully self-contained (datagrams)
+- Best-effort approach, resending is application's responsiblitiy 
+- Faster (no recovery, no flow control, no connection establishment) 
 
+Why have UDP?
+- To **identify the process responsible for a specific conversion
+**
+
+### Handling of Messages through NAT 
+
+When internal client sends message to external server: 
+ - Router converts **source IP to router's public IP** 
+ - Router converts **source port to some available port** 
+ - Router adds entry to NAT table re: conversion 
+ - Each "conversation" has **one entry in NAT table **
+
+When response comes from **external server**:
+- Router finds NAT entry for destination IP/Port 
+- Router changes destination IP/port to value in entry 
+
+### NAT Forwarding Table Example 
+
+```
+=============================================================================
+Internal IP | Internal Port | Remote IP | Remote Port | WLAN IP  | WLAN Port |
+=============================================================================
+192.168.0.2 | 9999          | 123.4.5.6 | 80          | 200.1.2.3| 12345     |
+------------------------------------------------------------------------------
+```
+
+### Server on the INSIDE 
+
+What if the initial connection comes from outside?
+- Example: server is insdie the NAT </br>
+- Example: connection where both hosts are inside a NAT </br>
+
+NAT conversion will not find an entry in the table 
+
+**Option 1: Manually add a fixed rule**
+
+- Example add a rule that if a connection comes to port 200.1.2.3:8080, it should be forwarded to 192.168.0.2:80 
+
+```
+=============================================================================
+Internal IP | Internal Port | Remote IP | Remote Port | WLAN IP  | WLAN Port |
+=============================================================================
+192.168.0.2 | 9999          | 123.4.5.6 | 80          | 200.1.2.3| 12345     |
+------------------------------------------------------------------------------
+192.168.0.2 |  80           | Any (manual/UPnP entry) | 200.1.2.3| 8080      |
+------------------------------------------------------------------------------
+```
+**Option 2: UPnP** (Universal Plug and Play)
+
+- Protocol that runs on the router and internal host 
+- Host asks router to enter a forwarding rule (like the manual rule) 
+
+### Applications and NAT 
+
+Some application-level protocols advertise the IP address 
+- Internal host advertise address to be used for connection 
+- Example: FTP active mode 
+- Example: P2P applications 
+
+If behind NAT, how does client know which IP to use?
+
+Solution: depends on the application
+- FTP: use passive mode 
+- P2P: typically require manual set up or UPnP 
 
 
