@@ -2,13 +2,13 @@
 
 This is Jay Chung's Computer Network's study note
 
-Unit1 : Design of Internet 
-Unit2 : The Internet Protocol
-Unit3 : DNS, NAT and Multiplexing
-Unit4 : Performance
-Unit5 : Reliable Transfer and TCP
-Unit6 : Application Layer Protocol
-Unit7 : Security
+- Unit1 : Design of Internet 
+- Unit2 : The Internet Protocol
+- Unit3 : DNS, NAT and Multiplexing
+- Unit4 : Performance
+- Unit5 : Reliable Transfer and TCP
+- Unit6 : Application Layer Protocol
+- Unit7 : Security
 
 ## Unit1
 
