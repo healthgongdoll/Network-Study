@@ -388,8 +388,136 @@ Assigned by manufacturer
 - First 24 bits: identifies the manufactuer
 - Last 24 bits: uniquely set by the manufacturer
 
+## UNIT3
+
+### Naming and Network Structure 
+
+How do we know which destination IP to use? </br>
+Problems:
+- Humans have hard time remembering numbers
+- Addresses can change 
+
+Solution: Map user-freindly names to IP addresses (**This is called DNS Domain Name Service**)
+- Names are easier to remember 
+- Names can mask address changes 
+
+### implementing a Name Service 
+What are Pros and Cons of using 
+- **A single centralized server**
+  - Pros: easier to synchronize
+  - Cons: single point of failure, high congestion and latency
+- **A replicated set of server**
+  - Pros: Stop the single point of failure
+  - Cons: Cost and synchronization problem
+
+### DNS Hierarchy
+
+DNS uses a hierarchy of servers 
+ - some machines in hierarchy may be replicated but they don't need to be 
+
+Root name servers are known by most DNS implementations 
+- 13 servers 
+
+Load is distribued
+
+Name ownership is distributed 
+
+### DNS Design Challenges 
+
+Performance 
+ - OpenDNS alone servers about 100 billion request per day (over 1 million per second) 
+
+Which server contains "the answer" ?
+- Does any other server contain a copy?
 
 
+### Answer to a Regular Query 
+
+```
+;; QUESTION SECTION:
+;ca.prairielearn.com.       IN       A
+
+;;ANSWER SECTION: 
+ca.prairielearn.com   60    IN       A    15.222.173.100
+ca.prairielearn.com   60    IN       A    3.96.69.126
+```
+
+### ANYCAST 
+
+Some DNS server use a technique called **anycast** </br>
+Same IP address is served by multiple hosts </br>
+- Each host advertises its IP (or range) to its neighbours </br>
+Requestor reach the cloest server 
+
+### ANYCAST LIMITATION
+
+Only stateless UDP-based protocols can be used </br>
+- Example: DNS
+
+All host must be able to provide same (or equivalent) data </br>
+- Root nameserver's information doesn't change often 
+
+### Limited Number of IP Address
+
+We are running out of IP addresses </br>
+Do you actually need a globally unique address? </br>
+What would other hosts need your address for? </br>
+- Do ohter hosts initiate a connection to your host? </br>
+Can several hosts share an IP address? </br>
+
+### NON-Routable IP Address
+
+Some addresses were put in place that can never be advertised publically 
+ - Initially used only for local communication (no Interent Connection) 
+
+**Networks:**
+- 10.0.0.0/8 (16 million addresses)
+- 172.16.0.0/12 (1 million addresses) 
+- 192.168.0.0/16 (65,536 addresses) 
+- Carrier-grade NAT: 100.64.0.0/10 (4 million addresses) 
+
+### Sharing an Address 
+
+Can several hosts share an IP address?
+- If they share an address, how do you distinguish incoming messages?
+
+Solution: NAT **(Network Address Translation)**
+- NAT Router gets a **public IP address** 
+- All other hosts in the network get a **private network address **
+
+### NAT Router Configuation 
+
+```
+===============
+| 192.168.0.2 | __
+===============   |
+                  |
+                  |
+===============   |        ===============        ===========
+| 192.168.0.3 | _________  | 192.168.0.1 | ROUTER |200.1.2.3| _____
+===============   |        ===============        ===========
+                  |        
+                  |
+===============   |
+| 192.168.0.4 | __|
+===============
+```
+
+### Connection Multiplexing 
+How can you Identify if two messages are part of the same conversation?
+
+### Identifying a Connection
+
+IP address: Local and remote 
+ - For incoming messages, local is receiver, remote is sender 
+ - For outgoing messages, local is sender, remote is receiver 
+
+Transport-Layer Protocl 
+- Typically TCP or UDP 
+
+Transport-Layer **"Address"**
+- Port Number 
+- Local port and remote port 
 
 
 
