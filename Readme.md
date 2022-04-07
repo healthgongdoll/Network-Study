@@ -274,7 +274,116 @@ Each AS must tell other ASs
  - Which addresses it can handle 
  - which addresses it is willing to route to 
 
-###
+### External Routing EBGP
+
+Advertise Prefixes. Each prefix include:
+- AS number
+- AS path (prevents looping by allowing receiver to look for itself) 
+- Next hop to take 
+
+Receiver of advertisement builds forwarding table based on:
+- AS management decisions
+- Shortest route 
+- Closest connecting router (hot potato routing) 
+
+### Routing within an AS 
+
+Internal BGP: communication between external routers about external routes 
+
+Interior Gateway Protocols: routing between hosts in the same network 
+- OSPF (Open Shortest Path First): link-state routing, based on network topology
+- RIP (Routing Information Protocol): distance-vector routing, based on advertised hop counts 
+
+### AS Agreements 
+
+**Peering agreement**
+- Two ASs (e.g. ISPs) pass traffic between each other's customers 
+
+**Transit agreement**
+- AS passes traffic from source AS to get to a different AS 
+
+### IP Address Assignment
+When Company **"joins"** an ISP it may receive an IP address/range
+
+Alternative: You can get it through different means and tell ISP 
+- E.g. Keep your IP from previous ISP 
+- ISP will then announce your prefix as reachable through them 
+- Usually charged differently 
+- ISP gets it (maybe indirectly) from an RIR (Regional Interent Registry) 
+  - US/Canada: ARIN
+- RIRs get address from IANA (Internet Assigned Numbers Authority) 
+
+### Assigning Individual Addresses 
+
+Network administrators may divide network in smaller subnets 
+ - Usually for specific areas or purposes (e.g. departments, labs, etc) 
+
+Severs and desktop computers may be assigned fixed IP addresses manually 
+
+### Assigning Addresses - Problems 
+
+What if the address for several computers needs to change?
+- rearrangement of subnets 
+
+Laptops and mobile devices: do they need to change addresses in different networks?
+
+Solution: what if computers asked a central authrotiy for an IP address when connecting to a network?
+
+### DHCP (Dynamic Host Configuration Protocol)
+
+A host that needs an IP address requests one from a server
+- What server should a host contact?
+
+Solution: send a broadcast request 
+
+### DHCP Steps 
+
+**DHCP Discover**: client asks server for an IPaddress
+**DHCP Offer**: server provides a possible IP address to client 
+**DHCP Request**: client accepts the offer and requests to be assigned the IP address
+**DCHP ACK**: server acknowledges request and assigns new IP address to client
+
+
+![image](https://user-images.githubusercontent.com/79100627/162100221-fd17a3bc-3cb1-48ef-a251-2351b1f4714d.png)
+
+### DHCP Offer/ACK includes
+
+- Unique IP Address for client 
+- Netmask for local network 
+- Lease time
+  - How long can you use the IP address before renewing (in seconds)
+- Routing information 
+  - Usually IP address for only one catch-all router (default gateway) is provided
+- Host name, domain name 
+- Name server
+
+### After DHCP
+The computer got an IP what is next?
+- It knows the address range of the local network 
+- It knows the router(s) to use for other IPs 
+
+Computer can build the IP datagram
+
+Computer knows IP of the next hop
+- Either the destination or the router
+
+But what about the link-layer address?
+
+### Link Layer Address
+
+Each network interface card typically has **one MAC address**
+
+Addresses are, in theory, **globally unique**
+ - Usually, if you use the MAC provided with your card, it is 
+
+Assigned by manufacturer 
+- First 24 bits: identifies the manufactuer
+- Last 24 bits: uniquely set by the manufacturer
+
+
+
+
+
 
 
 
