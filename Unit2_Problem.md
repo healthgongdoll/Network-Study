@@ -47,7 +47,36 @@ Private network has its own private addresses assigned by the internet service p
 ![image](https://user-images.githubusercontent.com/79100627/162333589-22557d7a-c1f2-4048-b3c8-53a914760e2d.png)
 
 - Provide a forwarding table that has five entries, uses longest prefix matching, and forwards packets to the correct link interfaces 
+
+Since we have to provide the forwarding table using longest prefix match 
+
+```
+Forwarding table will be like this 
+
+===========================================
+|  Prefix Match    |     Link Interface   |
+===========================================
+| 11100000 00      |          0           | -> because since it's longest prefix match 11100000 0000... ~ 11100000 00111111 
+-------------------------------------------
+| 11100000 01000000|          1           | -> 11100000 01000000 000... ~ 11100000 01000000 111... 
+-------------------------------------------
+| 11100000         |          2           | -> 11100000 01000001 ~ 11100000 01111111 111...  
+-------------------------------------------
+| 11100000   1     |          3           |
+-------------------------------------------
+| OTHERWISE        |          3           |
+-------------------------------------------
+
 - describe how your forwarding table determines the appropriate link interface for datagrams with destination addressses
+
+```
+11001000 10010001 01010001 01010101
+11100001 01000000 11000011 00111100
+11100001 10000000 00010001 01110111
+Prefix match for first address is 5th entry: link interface 3
+Prefix match for second address is 3nd entry: link interface 2
+Prefix match for third address is 4th entry: link interface 3
+```
 
 ### P6. Consider a datagram network using 8-bit host addresses. Suppose a router uses longest prefix matching and has the following forwarding table:
 ![image](https://user-images.githubusercontent.com/79100627/162335011-050a1d30-7d08-4136-9891-01df07d0e5db.png)
