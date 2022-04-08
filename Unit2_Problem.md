@@ -81,6 +81,13 @@ Prefix match for third address is 4th entry: link interface 3
 ### P6. Consider a datagram network using 8-bit host addresses. Suppose a router uses longest prefix matching and has the following forwarding table:
 ![image](https://user-images.githubusercontent.com/79100627/162335011-050a1d30-7d08-4136-9891-01df07d0e5db.png)
 
+```
+00000000  ~ 00111111-> 0
+01000000  ~ 01011111-> 1
+01100000  ~ 10111111-> 2
+11000000  ~ 11111111-> 3
+```
+
 ### P7. Consider a datagram network using 8-bit host addresses. Suppose a router uses longest prefix matching and has the following forwarding table
 
 ![image](https://user-images.githubusercontent.com/79100627/162335209-fd67198b-9a7b-47be-8a6c-97c5b68c0449.png)
@@ -88,7 +95,20 @@ Prefix match for third address is 4th entry: link interface 3
 For each of the four interfaces, give the associated range of destination host addresses and the
 number of addresses in the range
 
+```
+10000000 ~ 11111111 -> 0
+10000000 ~ 10111111 -> 1
+11100000 ~ 11111111 -> 2
+else 
+```
+
 ### P8. Consider a router that interconnects three subnets: Subnet 1, Subnet 2, and Subnet 3. Suppose all of the interfaces in each of these three subnets are required to have the prefix 223.1.17/24. Also suppose that Subnet 1 is required to support at least 60 interfaces, Subnet 2 is to support at least 90 interfaces, and Subnet 3 is to support at least 12 interfaces. Provide three network addresses (of the form a.b.c.d/x) that satisfy these constraints
+
+```
+Subnet 1 = 60 addresses = 2^6 = 223.1.17.0 / 25
+Subnet 2 = 90 addresses = 2^7 = 223.1.17.128 / 26
+Subnet 3 = 12 addresses = 2^4 = 223.1.17.192 / 26
+```
 
 ### P11. Consider a subnet with prefix 128.119.40.128/26. Give an example of one IP address (of form xxx.xxx.xxx.xxx) that can be assigned to this network. Suppose an ISP owns the block of addresses of the form 128.119.40.64/26. Suppose it wants to create four subnets from this block, with each block having the same number of IP addresses. What are the prefixes (of form a.b.c.d/x) for the four subnets?
 
