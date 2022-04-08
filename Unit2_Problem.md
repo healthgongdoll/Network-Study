@@ -66,7 +66,7 @@ Forwarding table will be like this
 -------------------------------------------
 | OTHERWISE        |          3           |
 -------------------------------------------
-
+```
 - describe how your forwarding table determines the appropriate link interface for datagrams with destination addressses
 
 ```
