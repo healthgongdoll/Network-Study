@@ -599,3 +599,130 @@ Solution: depends on the application
 - P2P: typically require manual set up or UPnP 
 
 
+## Unit 4 
+
+### Network Structure 
+
+Hosts 
+- "Things" the users interact with: desktop computers, laptops, cell phones, etc.
+- End systems or edge compoenents 
+
+Connecting media 
+- Wires, cables, radio waves 
+
+Interconnecting hardware 
+- Routers, switches, hubs, firewalls 
+
+Network Interface components 
+- Convert digital data to/from transmission signals 
+
+### Network Metrics: Latency 
+
+Latency: delayfrom when something is sent until it is received 
+- "Something" depends on context, but must be consistent 
+
+Examples:
+- Packet Latency: From start of sending packet until completely received 
+- Bit/byte Latency: From start of sending bit/byte until completely received 
+
+### Network Metrics: RTT 
+
+Round Trip Time (RTT): Latency for sending a packet and receiving a response 
+- Latency for message + latency for response + processing time 
+
+Easier to compute (single location for clock) </br>
+Reported by ping, traceroute, etc </br>
+
+### Network Metrics: Jitter 
+
+Observer that not all ping times are the same </br>
+Jitter: variation in latency and/ or RTT </br>
+What causes jitter? </br>
+
+### Network Metrics: Throughput 
+
+Throughput: amount of data moved from one location to another in a given time </br>
+Usually expressed in bytes per second (B/s, MB/s, etc) or bits per second (bps, Mbps, etc) 
+
+### Network Metrics: Bandwidth 
+
+Bandwidth: maximum rate at which data can be sent over a link
+ - Througput is the rate that is actually achieved 
+
+Throughput cannot exceed bandwidth 
+
+### Network Metrics: Goodput 
+
+Goodput: rate at which useful data arrives 
+- Does not include headers and encoding costs 
+
+May depend on context and application-layer protocol 
+
+### Bottlenecks 
+
+What is the maximum throughput possible (bandwidth) between two nodes connected by a network?
+- Can traffic at maximum bandwidth in all links? 
+
+### Causes of Delay 
+
+- Processing delay: examine packet to decide where to direct it 
+- Queueing delay: waiting time to get access to the link 
+- Transmission delay: time to actually write the packet onto the medium 
+- Propagation delay: time spent to move each bit from source to destination on the transmission medium 
+- End to end delay: sum of all sources of delay 
+
+### Traffic Intensity 
+
+How much data can route handle?
+- At what rate can the router process data?
+- At what rate can the router forward data out?
+
+Queueing: When a router receives data faster than it can dispose of 
+
+### Traffic Intensity Calculation 
+
+Traffic intensity is determined by 
+- Number of packets arraving (L)
+- Average packet size (a) 
+- Transmission rate: rate at which bits are disposed of (R) 
+
+Traffic intensity is, thus: La/R
+
+### Traffic Intensity Rationale 
+
+Traffic intensity helps us understand how busy a link is 
+
+Queuing delay is related to the intensity 
+- Queueing delay is delay caused by waiting for queue to clear 
+- Packets arriving must wait for packets already there to leave 
+
+### Traffic Intensity vs Queueing Delay 
+
+Suppose La bits/second arrive randomly for an outgoing link in a router 
+ - Sustained traffic, not bursts 
+
+Suppose that the router can transmit R bits/second 
+
+Draw a graph of queing delay vs Traffic intensity 
+- What does La = R mean?
+- What does La > R mean?
+- What does La < R mean?
+- WHat does La << R mean?
+
+### Traffic Intensity vs Queuing Delay 
+
+Assuming packets arrive at an exponential distribution, delay is given by:
+
+**Delay = S/ 1- U**
+
+Where: </br>
+- S is average service time when server is idle
+- U is server utilization (traffic intensity) 
+
+### Some Observations 
+- Routers don't have inifite buffer space
+- If packets arrive faster than they can be disposed of, they may have to be dropped 
+- Packets may also be corrupted in transit 
+ - These packets must be discarded, since their content is no longer valid 
+ - Even routing information (e.g., destination IP) may be corrupted 
+- How can a transmission be considered reliable with this in mind?
