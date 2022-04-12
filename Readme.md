@@ -726,3 +726,290 @@ Where: </br>
  - These packets must be discarded, since their content is no longer valid 
  - Even routing information (e.g., destination IP) may be corrupted 
 - How can a transmission be considered reliable with this in mind?
+
+## Unit 5
+
+### Protocols 
+
+A protocol defines the format and the order of messages exchanged between two or more communicating entities, as well as the actions taken on the transmission and/or receipt of a message or other event 
+
+**Key Concepts**
+- Format and order of messages 
+- Actions to be taken on events 
+
+A fully-defined protocol must provide a proper action for any event in any state 
+
+### Basic Protocol as State Machine
+
+![image](https://user-images.githubusercontent.com/79100627/162867500-bdde913b-7f35-44a7-93fa-3871a40a5f67.png)
+
+### Building a Reliable Protocol 
+
+Let's create a protocol for reliable delivery 
+- Send only one packet at a time
+- Identify when sending is allowable action 
+- Identify when resending is required 
+- Enumerate events and actions for both sender and receiver 
+- Draw state machine 
+
+### Possible Events and Actions 
+
+Receiver 
+- Packet received without problems: **Send ACK**
+- Packet received corrupted: **Send NAK**
+
+Sender 
+- Data ready to send: **Send Data**
+- Receive ACK: **Get ready to send more data**
+- Receive NAK: **Resent data**
+
+### Corrupt Response
+
+What if **ACK/NAK is corrupted?**
+
+What if:
+- We ignore the corrupt ACK/NAK?
+- We treat it as an ACK?
+- We treat it as a NAK?
+
+### Dealing with duplicated transfer
+
+How can the receiver deal with a duplicate packet?
+
+What information needs to be included to allow receiver to identify packets as duplicate?
+
+Reminder: Scenario does not lose data, only corrupts
+
+### Possible Events 
+
+Receiver
+- Packet 0 received without problems 
+- Packet 1 received without problems 
+- Receive Corrupt Packet 
+
+Sender 
+- Data ready to send
+- Receive ACK0/ACK1
+- Receive NAK
+- Receive Corrupt Response 
+
+### Alternate Bit Protocol 
+![image](https://user-images.githubusercontent.com/79100627/162872772-861ff8ce-c04b-44a3-8fd0-c6690d6e1fe3.png)
+
+### Alternate Bit Protocol (Without NAK)
+
+![image](https://user-images.githubusercontent.com/79100627/162872838-2b8859f0-6856-4a87-970e-3139872630e8.png)
+
+### What If A Packet is lost?
+- What happens if a packet is lost?
+- What happens if an ACK is lost?
+- How to determine if a packet is lost?
+ - Who determines it? Sender or receiver? 
+
+- What changes are needed on the receiver ? 
+- What changes are needed on the sender ?
+
+### Corrupt or Lost? 
+- Does it make sense to distinguish corrupt data from lost data?
+ - If something is corrupt, we do not know what's corrupt
+ - headers may have been corrupted too
+ - The corrupt packet may not even be for you !!! 
+
+- So, corrupt data becomes lost data 
+ - Usually at link layer 
+
+### Alternate Bit Protocol (TimeOut)
+
+![image](https://user-images.githubusercontent.com/79100627/162873223-bc316cf3-e59c-4cfd-9b4f-3c2749085a7c.png)
+
+### How Long Should TimeOut Be?
+- Should it be the same across connections?
+- Should it always be same for the same connection?
+- What happens if timeout is too long?
+- What happens if timeout is too short?
+- What measured metric can be used to infer a proper timeout?
+
+### Estimating Timeout
+- Simple Average of RTT doesn't respond quickly enough 
+  - Also doesn't capture jitter 
+- Timeout value must adapt 
+ - Track changes in RTT over time
+ - Accomodate packet-to-packet deviations due to jitter 
+
+### Timeout Formula 
+![image](https://user-images.githubusercontent.com/79100627/162873553-b8bb0e73-48d4-4c32-93fa-40624495d6eb.png)
+
+### Alternatvie Bit Protocol in Practice 
+
+Assume a connection from Vancouver to Montreal 
+- RTT is 30ms 
+- Link Speed is 1Gbps 
+- Packet size is 1000 bytes, including overhead 
+
+How much of bandwidth are we actually using?
+- Only one packet is sent at a time 
+- Transmission delay, one packet: 8000/10^9 = 0.008ms 
+- Utilization: 0.008 / 30 + 0.008 = 0.00027 (or 0.0027%)
+
+How can we solve this?
+
+### Sending multiple Packets 
+- Sender can send multiple packets 
+- Don't wait for each acknowledgement 
+ - Assume most pacekt are successful 
+- Sender needs to save sent packets to potentially resend 
+ - Size is limited 
+
+### Sender's Window
+- Sender's window: range of packets that are stored for potential resend 
+- Window only moves when first packet in window is acknowledged 
+ - What is other ACKs are received? 
+- New Packets are sent only when they "fit" in the window 
+
+### Receiver's Window 
+- What if receiver recieves packets out of order?
+- Receiver's window: store packets received out of order 
+ - If window is 1 packet: out of order packets are dropped 
+- Once missing packets arrive, window is processed 
+- Packets received beyond the window limit will be discarded 
+
+### Problems to consider 
+
+Sender:
+- How does the sender know that data got lost?
+- Can lost data be distinguished from a lost ACK?
+- If we send more than one packet, how many packets can we remember?
+
+Receiver:
+- How can you tell if data is out of order or missing?
+- What should be ACKed?
+
+### Go-Back-N Strategy 
+
+Receiver
+- When pacekt is received, send ACK for last packet received in order 
+- Discard arriving packet if out of order (receiver window is 1) 
+
+Sender
+- Can have a specific number of outstanding (unacknowledged) packets in memory: sender's window
+- Start timer on first packet sent 
+- On timeout go to last unack' ed packet and resend everyting (restart timer) 
+- Received ACKs may be cumulative (restart timer on receipt) 
+
+### Selective-Repeat Strategy 
+
+Receiver
+- Each packet is acked individually 
+- Out of order packet is sotred for later: receiver's window 
+
+Sender
+- Can have a specific number of outstanding (unacknowledged) packets in memory: sender's window
+- Each packet has its own timer 
+- Each packet is individually resent if timeout is reached 
+- ACKs received in order move the sender's window 
+
+### Sequence Nubmer Range 
+
+The range of possible sequence number is limited by the number of bits used for it 
+- Ex: 3 bits gets numbers 0-7, 8 bits gets numbers 0-255 
+- Sequences return to zero (e.g. in range of 0-7, after 7 comes another 0) 
+
+What is the maximum sender window size for the range 0-255?
+- maybe easier to compute: what about range 0-3?
+- can receiver distinguish a new 0 from a resent old 0?
+- Does the answer change for selective reapt vs go-back-N?
+
+Rule: **Sender's Window size + receiver's window size <= sequence number range**
+
+For a range with n numbers (0 to n-1):
+Go-back-N
+- Receiver's window size is 1
+- sender's maximum window size is n-1
+
+Selective repeat 
+- any values for window sizes that add up to n is fine 
+- for same szie on both sides use lower (n/2) 
+
+### TCP Implementation
+
+Both sides act as sender and receiver 
+- All packets have both a sequence number and an ACK 
+- Sequence numbers in one direction correspond to ACK numbers in opposite direction
+- Sequence numbers are incremented by payloadsize 
+
+Retranmission strategy
+- ACKs correspond to first sequence number not yet received (Similar to Go-Back-N)
+- Receiver stores packets in its own window (like Selective - Repeat) 
+
+### Flow Control
+
+Should we always send the full window size?
+
+What if the receiving application is slow accepting new data?
+- Packets will accumulate in the receiver's buffer 
+- Eventually buffer will be full, packets will be dropped 
+- Immediately resending this ddata does not resolve the problem 
+
+Receiver will notify the sender how much data it can handle 
+- This information is usually included in the ACK 
+- Sender adjusts its window size based on this information 
+
+### Congestion Control
+
+What if the network can't handle a full window's worth of data?
+- Packets and ACKs will be dropped by the routers 
+
+Missing ACKs are a sign that there is congestion somewhere (in either direction)
+
+Sender can reduce sending window once congesetion is detected
+- Example: if some number of ACKs are missing in a period time 
+
+If all packets are ACKed, we can increase the window again
+
+### Congestion Control Strategy 
+
+Additive increase
+- Increase congestion window slowly 
+
+Multiplicative decrease 
+- If congestion detected, reduced congestion window quickly (divide by two)
+
+Slow start 
+- Increase is effectively double every RTT at start 
+
+Fast retransmission
+- Three or more ACKs with same number (when different numbers expected) trigger a retransmission without a timeout 
+
+### Effect on throughput 
+
+Throughput is affected by
+- Bandwidth of sender's direct network connection
+- Receiver's specified window size (Flow Control)
+- Sender's adjusted window size (Congesetion Control)
+
+If sender's direct connection is not the bottleneck:
+- Another router will experience congestion elsewhere 
+- congestion control will reduce transmission speed
+
+### TCP Connection Establishment 
+
+- TCP uses "three way handshake" to establish connection
+- Client sends initial SYN message 
+  - Initial sequence number for client->server is specified 
+- Server responds with SYN/ACK message
+  - Client -> Server sequence number is confirmed in ACK
+  - Server -> Client initial sequence number is specified 
+- Client sends an ACK message
+  - Server -> Client sequence number is confirmed in ACK 
+
+### TCP Connection Termination
+
+Side that wants to terminate sends FIN message 
+- Ohter side responds with ACK
+
+Other side will also send a FIN message 
+- It may not send it immediately since it may have more data to send 
+- Also responded with an ACK
+
+Alternative: Connection abortion (RST message)
+- Usually used if other side misbehaves or too many timeouts are detected
