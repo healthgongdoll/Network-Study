@@ -1013,3 +1013,280 @@ Other side will also send a FIN message
 
 Alternative: Connection abortion (RST message)
 - Usually used if other side misbehaves or too many timeouts are detected
+
+## Unit 6 
+
+### Application-Layer Protocols 
+
+Each application using networks will define its own protocol
+
+Application-level protocol will define:
+- Architecture: client-server, P2P
+- Who is the clinet, who is the server 
+- how does the clinet identify which server to contact 
+- types  of message (request, response, etc)
+- message syntax vs semantics 
+- rules for when client and/or server send/receive messages
+
+Open Protocols: publicly known
+- Examples: HTTP, SMTP, SSH
+- Usually defined in RFC documents 
+
+Proprietary protocols 
+- Examples: Skype, iCloud 
+- May be reverse-engineered, but subject to unannounced changes 
+
+### Clinet Server Architecture 
+
+- Well-defined roles for client and server
+- Server is always on, with permanent IP address or host name 
+- Clinet establishes connection
+- Connection is always between one client and one server 
+
+### Peer-To-Peer Architecture 
+
+- Connection typically between peers with same hierarchical role 
+ - Some hirarchy may be used, but connection is not restricted to it 
+- Peers request service from other peers, provide service in return
+- Self scalability: new peers bring new demand and more capacity 
+- Complex peer address management 
+
+### Application Examples
+
+File Transfer, web, email
+- Loss avert, not time sensitive, elastic throughput 
+
+On demand multimedia streaming 
+- Some loss tolerance, somewhat time sensitive 
+
+Real time multimedia, VoIP, interactive games 
+- Some loss tolerance, time sensitive, throughput requirements 
+
+Text messaging 
+- Loss avert, somewhat time sensitive, elastic throughput 
+
+DNS 
+- Loss tolerance, not time sensitive, elastic throughput 
+
+### Case Study: Electronic Mail 
+
+P.O. Box system:
+- Sender sends package to its local postal office 
+- Postal system forwards the package to final postal office 
+- Recipient must pick up package at its own local office 
+
+Email works the same way:
+- Sender sends message to its local server
+- Servers relay the message across other servers until it reaches destination server
+- Recipient must connect to its server to retrieve ("pull") message 
+
+### Email Components 
+
+**User agents**
+- Direct user interaction
+- Compose, edit, read mail messages
+- Outlook Thunderbird, apps 
+
+**Mail servers**
+- Maintain mailboxes (incomming messages) for each user 
+- Queue outgoing messages to be sent to other servers 
+
+![image](https://user-images.githubusercontent.com/79100627/163049307-31184e3a-4d2d-45cf-bce9-900e8ee33be3.png)
+
+
+### Email Protocols 
+
+**Simple Mail Transfer Protocol (SMTP) **
+- Used to send messages from user agent to server (message submission) 
+- Also used to send messages from server to server (message relay) 
+
+**Post Office Protocol 3 (POP3) **
+- Used to retrieve messages from server to use agent 
+
+**Internet Message Access Protocol (IMAP) **
+- Used to retrieve messages from server to user agent 
+
+**Proprietary protocols**
+- Microsoft Exchange (MAPI, EAS)
+- Web-based interfaces 
+
+### Email Transfer Example
+
+- Alice uses user agent (UA) to compose message to Bob
+- Alice's UA sends message (via SMTP) to her mail server 
+- Alice's server connects (as client) to Bob's server using SMTP 
+  - Message is relayed using this connection 
+  - In some cases additional relaying servers may be needed 
+- Bob's server places message in Bob's mailbox 
+- Bob invokes his UA to retrieve message from Bob's server
+ - Using POP3, IMAP, or Webmail 
+
+### SMTP 
+
+Uses TCP to transfer messages
+- Port 25 for message relay 
+  - typically blocked in firewalls by default 
+- Port 587 for message submission 
+  - Other ports may be used if 587 is blocked 
+- Command-response interaction (similar to DICT)
+ - Command: ASCII text, single line
+ - Response: 3 digit status code followed by text
+ - In-band message transfer (in ASCII only) 
+
+### POP3 
+
+Uses TCP port 110 
+- TCP port 995 for POP3S (typicallY) 
+
+Download and delete mode: client retrieves message and deletes from server
+- Changing clients requires manually transferring messages from client to client 
+
+Download and keep mode: client maintains message in server
+
+Stateless acorss sessions 
+
+### IMAP 
+
+TCP port 143 
+- TCP port 993 for IMAPS
+
+All messages are kept in the server
+
+Users can organize messages in folders 
+
+Message state, organization and deletion status is synchronized between server and all clients 
+
+### Mail Message Format 
+
+Header lines 
+- Each line format "Name: value"
+- Examples: From, To, Cc, Subject 
+- Ends with blank line (end of header) 
+
+Message body 
+- ASCII characters only
+- May have multiple parts: attachment, text vs HTML, etc.
+- Binary data encoded using text-only format 
+
+### Case Study: The World Wide Web 
+
+A web page consists of objects
+- A base HTML file refers to several referenced objects
+- Images, scripts, stylesheets, frames
+
+Each object (including base file) is addressable by a URL
+
+### Hypertext Transfer Protocol (HTTP) 
+
+Http is the Web's main application layer protocol 
+
+**Client/Server model**
+- Client: browser that requests, receives, displays Web objects
+- Server: sends objecct in response to requests 
+- Uses TCP, typically port 80 (443 for HTTPS)
+
+**For each Web Object (URL)** 
+- Client sends one request message at once 
+- Server sends full response message at once 
+
+Stateless: server maintains no information about past requests 
+
+### HTTP Message Example 
+
+**Request:**
+
+GET / index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Firefox/3.6.10
+...
+connection: keep-alive
+
+**Response**
+
+HTTP/1.1 200 OK
+Date: Sun, 13 Nov 2017 ...
+
+### Request Methods 
+
+GET method:
+- Relevant data is in URI/URL
+- Form data, if needed, found in URL itself
+- Often used in forms that search for data (though this varies) 
+
+POST method:
+- Includes form input in message body 
+- Often used in forms that submit new data
+
+HEAD method:
+- Similar to GET but returns only header
+- Used to check if existing content was modified
+
+### HTTP Response status code 
+
+2XX: Sucess
+
+3XX: additional action required 
+
+4XX: Client problem 
+
+5XX: Server PRoblem 
+
+### HTTP Connections 
+
+Non-Persistent HTTP 
+- At most one object is sent over TCP connection (one request, one response) 
+- Connection is closed as soon as data is trasnferred 
+- Web page with multiple objects requires multiple connections 
+
+Persistent HTTP 
+- Multiple requests can be sent over single connection
+- Responses are received in the same order as the requests 
+- Pipelining: client may send several requests without waiting response 
+
+### Performance Consideration 
+
+Non-persistent connections: 
+- Requires a new connection for every new object
+- Additional RTT for TCP 3 way handshake 
+
+Persistent connections:
+- Every object must wait for previous objects to complete 
+
+Modern browsers use multiple simultaneous connections 
+
+### Cookies: User-Server State 
+
+Web sites may use cookies to maintain state
+- Remember me authentication 
+- Session state
+- Shopping carts, recommendations
+
+Information is stored client side 
+- Every request includes saved cookies applicable specific context 
+
+### Cookies: Process 
+
+Process:
+- Response may include Set-Cookie Header 
+- Browser saves cookie associated to server
+- Next request to same server will include Cookie header with same value 
+
+Part of state may be stored server-side 
+- Cookie is used to identify entry in server database
+
+### Web Cache 
+
+Browser may maintain a cached version of page 
+- Reduces network utilization
+- Reduces page load time 
+
+Cache may also maintained in a seperate host (proxy) 
+- Browswer sends request to proxy, which redirects to server
+- If proxy has page cahced, return immediately 
+- Typically closer to user than the server (Company, ISP)
+
+Webserver cna provide cache policy like:
+- How long a page should be cached for
+- If cache is private (specific user) or shared
+
+Conditional GET: request page, but only if not modified 
