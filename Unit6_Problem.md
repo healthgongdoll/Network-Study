@@ -2,19 +2,38 @@ Chapter 2: R3, R5, R6, R7, R9, R11-20; P1, P2, P3, P4, P7-P11, P13-P15
 
 ### R3. For a communication session between a pair of processes, which process is the client and which is the server?
 
+- The process which initiates the communication is the client; the process that waits to be contacted is the server 
+
 ### R5. What information is used by a process running on one host to identify a process running on another host?
+
+- The IP address of the destination host and the port number of the socket in the destination process.
 
 ### R6. Suppose you wanted to do a transaction from a remote client to a server as fast as possible. Would you use UDP or TCP? Why?
 
+- I would use UDP. With UDP, the ransaction can be completed in one roundtrip time (RTT) - the client sends the transaction request into a UDP socket, and the server sends the reply back to the client's UDP socket, with TCP, a minimum of two RTTs are needed - one to set up the TCP connection and another for the client to send the request and for the server to send back the reply 
+
 ### R7. Referring to Figure 2.4 , we see that none of the applications listed in Figure 2.4 requires both no data loss and timing. Can you conceive of an application that requires no data loss and that is also highly time-sensitive?
+
+- One such example is remote word processing, for example, with Google docs. However, because Google docs runs over the Internet (using TCP), timing guarantees are not provided 
 
 ### R9. Recall that TCP can be enhanced with SSL to provide process-to-process security services,including encryption. Does SSL operate at the transport layer or the application layer? If the application developer wants TCP to be enhanced with SSL, what does the developer have to do?
 
+- SSL operates at the application layer. The SSL socekt takes unencrypted data from the application layer, encrypts it and then passes it to the TCP socekt. If the application developer wants TCP to be enhanced with SSL, she has to include the SSL code in the application. 
+
 ### R11. Why do HTTP, SMTP, and POP3 run on top of TCP rather than on UDP?
+
+- TCP is a more reliable than UDP because TCP is a connected oriented network where there is guarantee of the transmitted packet in reaching the destination 
+- TCP data transmission is accurate 
+- IN TCP, all the application data can be received without any gaps in a correct order but UDP does not 
+- loss of data in HTTP, SMTP,FTP and POP3 cannot be affordable using the UDP protocol. 
 
 ### R12. Consider an e-commerce site that wants to keep a purchase record for each of its customers. Describe how this can be done with cookies
 
+- When User first visits the site, the server creates a unique identification number, creates an entry in its back-end database, and returns this identification number as a cookie number. This cookie number is stored on the user's host and is managed by the browser. During each subsequent visit (and purchase), the browser sends the cookie number back to the site. Thus the site knows when this user (more precisely, this browser) is visiting the site. 
+
 ### R13. Describe how Web caching can reduce the delay in receiving a requested object. Will Web caching reduce the delay for all objects requested by a user or for only some of the objects
+
+- Web caching reduces the response time for client request. If there is a high speed connection between the client and the cache, and if the cache has the requested object, then the cache will be able to deliver the object rapidly to the client 
 
 ### R14. Telnet into a Web server and send a multiline request message. Include in the request message the If-modified-since: header line to force a response message with the 304 Not Modified status code.
 
@@ -22,11 +41,29 @@ Chapter 2: R3, R5, R6, R7, R9, R11-20; P1, P2, P3, P4, P7-P11, P13-P15
 
 ### R16. Suppose Alice, with a Web-based e-mail account (such as Hotmail or Gmail), sends a message to Bob, who accesses his mail from his mail server using POP3. Discuss how the message gets from Alice’s host to Bob’s host. Be sure to list the series of application-layer protocols that are used to move the message between the two hosts.
 
+Alice uses Web based e-mail account.
+
+HTTP protocol is used to send the message from Alice browser to web-based mail server. 
+
+From the web-based mail server, the message of the Alice is sent via SMTP 
+
+The message is sent to Bob's mail server though the SMTP server 
+
+From Bob's mail server, teh message is transferred to Bob browser by using POP3 Protocol in order to access the mail 
+
 ### R17. Print out the header of an e-mail message you have recently received. How many Received: header lines are there? Analyze each of the header lines in the message
+
+
 
 ### R18. From a user’s perspective, what is the difference between the download-and-delete mode and the download-and-keep mode in POP3?
 
+In the download- and delete mode, client receives messages from a POP, then delete the messages 
+
+In the download and keep mode, client receives messages from a POP and store messages, never deleted messages 
+
 ### R19. Is it possible for an organization’s Web server and mail server to have exactly the same alias for a hostname (for example, foo.com )? What would be the type for the RR that contains the hostname of the mail server?
+
+- Yes, an organization can have the same alias name for both its Web server and its mail server. An MX resource record type contains the host name of the mail server. 
 
 ### R20. Look over your received e-mails, and examine the header of a message sent from a user with a .edu e-mail address. Is it possible to determine from the header the IP address of the host from which the message was sent? Do the same for a message sent from a Gmail account.
 
